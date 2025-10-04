@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاختبارات التشخيصية - ميسر التعلم</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">
+                    <h1>ميسر التعلم</h1>
+                    <span>لوحة المعلم</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>مرحباً، أ/ صالح العجلان</span>
+                    <div class="user-avatar">👨‍🏫</div>
+                </div>
+                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
+                <li class="menu-item"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
+                <li class="menu-item active"><a href="tests.html">📝 الاختبارات</a></li>
+                <li class="menu-item"><a href="lessons.html">📚 الدروس</a></li>
+                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-content">
+            <div class="content-header">
+                <h1>الاختبارات التشخيصية 📝</h1>
+                <p>إنشاء وإدارة الاختبارات التشخيصية للطلاب</p>
+            </div>
+
+            <div class="table-header">
+                <h3>الاختبارات المنشأة</h3>
+                <div class="table-actions">
+                    <button class="btn btn-primary" onclick="showTestForm()">
+                        ➕ إنشاء اختبار جديد
+                    </button>
+                </div>
+            </div>
+
+            <div class="tests-grid">
+                <div class="test-card">
+                    <div class="test-header">
+                        <h3>اختبار القراءة - الصف الثاني</h3>
+                        <span class="test-badge active">نشط</span>
+                    </div>
+                    <div class="test-info">
+                        <p>اختبار تشخيصي لمهارات القراءة الأساسية</p>
+                        <div class="test-meta">
+                            <span>📊 15 سؤال</span>
+                            <span>⏱️ 30 دقيقة</span>
+                            <span>👥 8 طلاب</span>
+                        </div>
+                    </div>
+                    <div class="test-actions">
+                        <button class="btn btn-sm btn-outline">عرض</button>
+                        <button class="btn btn-sm btn-outline">تعديل</button>
+                        <button class="btn btn-sm btn-danger">حذف</button>
+                    </div>
+                </div>
+
+                <div class="test-card">
+                    <div class="test-header">
+                        <h3>اختبار الكتابة - الصف الثالث</h3>
+                        <span class="test-badge active">نشط</span>
+                    </div>
+                    <div class="test-info">
+                        <p>تقيم مهارات الكتابة والتهجئة</p>
+                        <div class="test-meta">
+                            <span>📊 12 سؤال</span>
+                            <span>⏱️ 25 دقيقة</span>
+                            <span>👥 5 طلاب</span>
+                        </div>
+                    </div>
+                    <div class="test-actions">
+                        <button class="btn btn-sm btn-outline">عرض</button>
+                        <button class="btn btn-sm btn-outline">تعديل</button>
+                        <button class="btn btn-sm btn-danger">حذف</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- نموذج إنشاء اختبار -->
+    <div id="testFormModal" class="form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إنشاء اختبار جديد</h3>
+                <button class="close-modal" onclick="hideTestForm()">×</button>
+            </div>
+            <form id="testForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="testTitle">عنوان الاختبار</label>
+                        <input type="text" id="testTitle" required placeholder="مثال: اختبار القراءة - الصف الثاني">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testGrade">الصف الدراسي</label>
+                            <select id="testGrade" required>
+                                <option value="">اختر الصف</option>
+                                <option value="first">الصف الأول</option>
+                                <option value="second">الصف الثاني</option>
+                                <option value="third">الصف الثالث</option>
+                                <option value="fourth">الصف الرابع</option>
+                                <option value="fifth">الصف الخامس</option>
+                                <option value="sixth">الصف السادس</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="testSubject">المادة</label>
+                            <select id="testSubject" required>
+                                <option value="">اختر المادة</option>
+                                <option value="reading">القراءة</option>
+                                <option value="writing">الكتابة</option>
+                                <option value="math">الرياضيات</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="testDescription">وصف الاختبار</label>
+                        <textarea id="testDescription" rows="3" placeholder="وصف مختصر عن محتوى الاختبار"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testDuration">المدة (دقيقة)</label>
+                            <input type="number" id="testDuration" value="30" min="5" max="180">
+                        </div>
+                        <div class="form-group">
+                            <label for="testQuestions">عدد الأسئلة</label>
+                            <input type="number" id="testQuestions" value="10" min="1" max="50">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="hideTestForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إنشاء الاختبار</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // تسجيل الخروج
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                window.location.href = '../login.html';
+            }
+        });
+
+        // إدارة الاختبارات
+        function showTestForm() {
+            document.getElementById('testFormModal').classList.add('active');
+        }
+
+        function hideTestForm() {
+            document.getElementById('testFormModal').classList.remove('active');
+        }
+
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم إنشاء الاختبار بنجاح!');
+            hideTestForm();
+        });
+
+        // تنسيقات إضافية للاختبارات
+        const style = document.createElement('style');
+        style.textContent = `
+            .tests-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+            }
+            .test-card {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 10px;
+                box-shadow: var(--shadow);
+                border-left: 4px solid var(--primary-color);
+            }
+            .test-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+            }
+            .test-header h3 {
+                color: var(--secondary-color);
+                margin: 0;
+            }
+            .test-badge {
+                padding: 0.3rem 0.8rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 500;
+                background: #d4edda;
+                color: #155724;
+            }
+            .test-info p {
+                color: #666;
+                margin-bottom: 1rem;
+            }
+            .test-meta {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
+                color: #888;
+            }
+            .test-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
