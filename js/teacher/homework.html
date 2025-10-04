@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الواجبات - ميسر التعلم</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="../images/logo.png" alt="شعار ميسر التعلم" class="logo-image" onerror="this.style.display='none'">
+                    <div class="logo-text">
+                        <h1>ميسر التعلم</h1>
+                        <span>لوحة المعلم</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>مرحباً، أ/ صالح العجلان</span>
+                    <div class="user-avatar">👨‍🏫</div>
+                </div>
+                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
+                <li class="menu-item"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
+                <li class="menu-item"><a href="tests.html">📝 الاختبارات</a></li>
+                <li class="menu-item"><a href="lessons.html">📚 الدروس</a></li>
+                <li class="menu-item"><a href="handwriting.html">✍️ تحسين الخط</a></li>
+                <li class="menu-item active"><a href="homework.html">📋 الواجبات</a></li>
+                <li class="menu-item"><a href="activities.html">🎯 الأنشطة</a></li>
+                <li class="menu-item"><a href="schedule.html">📅 الجدول</a></li>
+                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-content">
+            <div class="content-header">
+                <h1>الواجبات 📋</h1>
+                <p>إدارة وإرسال الواجبات للطلاب</p>
+            </div>
+
+            <div class="homework-actions">
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="homeworkManager.showHomeworkForm()">
+                        ➕ إرسال واجب جديد
+                    </button>
+                </div>
+
+                <div class="filters">
+                    <select id="statusFilter">
+                        <option value="">جميع الحالات</option>
+                        <option value="active">نشط</option>
+                        <option value="completed">مكتمل</option>
+                        <option value="cancelled">ملغى</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="homework-grid" id="homeworkContainer">
+                <!-- يتم تعبئته بالبيانات -->
+            </div>
+        </main>
+    </div>
+
+    <!-- نموذج إنشاء واجب -->
+    <div id="homeworkFormModal" class="form-modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 id="homeworkFormTitle">إرسال واجب جديد</h3>
+                <button class="close-modal" onclick="homeworkManager.hideHomeworkForm()">×</button>
+            </div>
+            <form id="homeworkForm" onsubmit="homeworkManager.saveHomework(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="homeworkTitle">عنوان الواجب *</label>
+                        <input type="text" id="homeworkTitle" name="title" required placeholder="مثال: واجب القراءة الأسبوعي">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="homeworkDescription">وصف الواجب</label>
+                        <textarea id="homeworkDescription" name="description" rows="3" placeholder="وصف مفصل للواجب والمطلوب من الطالب..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dueDate">موعد التسليم *</label>
+                        <input type="date" id="dueDate" name="dueDate" required>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>الطلاب المعينون *</label>
+                        <div class="students-checklist" id="studentsList">
+                            <!-- يتم تعبئته بقائمة الطلاب -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="homeworkManager.hideHomeworkForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إرسال الواجب</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="homework.js"></script>
+    
+    <style>
+        .homework-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .filters select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .homework-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .homework-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .homework-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .homework-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .homework-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #2c3e50;
+        }
+        
+        .homework-meta {
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .homework-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .time-left {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .time-normal {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .time-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .time-urgent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .time-overdue {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .homework-content {
+            padding: 1.5rem;
+        }
+        
+        .homework-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .homework-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .homework-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
+        .detail-label {
+            color: #666;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        .assigned-students-list {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .students-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .student-tag {
+            background: #e9ecef;
+            padding: 0.3rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #495057;
+        }
+        
+        .students-checklist {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+        
+        .student-checkbox {
+            margin-bottom: 0.5rem;
+        }
+        
+        .student-checkbox label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        
+        .student-checkbox input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .homework-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .homework-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تصميم الدروس - ميسر التعلم</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">
+                    <h1>ميسر التعلم</h1>
+                    <span>لوحة المعلم</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>مرحباً، أ/ صالح العجلان</span>
+                    <div class="user-avatar">👨‍🏫</div>
+                </div>
+                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
+                <li class="menu-item"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
+                <li class="menu-item"><a href="tests.html">📝 الاختبارات</a></li>
+                <li class="menu-item active"><a href="lessons.html">📚 الدروس</a></li>
+                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-content">
+            <div class="content-header">
+                <h1>تصميم الدروس 📚</h1>
+                <p>إنشاء وإدارة الدروس والتدريبات التفاعلية</p>
+            </div>
+
+            <div class="table-header">
+                <h3>الدروس المنشأة</h3>
+                <div class="table-actions">
+                    <button class="btn btn-primary" onclick="showLessonForm()">
+                        ➕ إنشاء درس جديد
+                    </button>
+                </div>
+            </div>
+
+            <div class="lessons-grid">
+                <div class="lesson-card">
+                    <div class="lesson-header">
+                        <h3>درس الحروف المتشابهة</h3>
+                        <span class="lesson-badge reading">قراءة</span>
+                    </div>
+                    <div class="lesson-info">
+                        <p>تمييز الحروف المتشابهة في الشكل والنطق</p>
+                        <div class="lesson-meta">
+                            <span>👨‍🎓 الصف الثاني</span>
+                            <span>🎯 12 طالب</span>
+                            <span>⭐ 85% إتقان</span>
+                        </div>
+                    </div>
+                    <div class="lesson-actions">
+                        <button class="btn btn-sm btn-outline">عرض</button>
+                        <button class="btn btn-sm btn-outline">تعديل</button>
+                        <button class="btn btn-sm btn-danger">حذف</button>
+                    </div>
+                </div>
+
+                <div class="lesson-card">
+                    <div class="lesson-header">
+                        <h3>تدريب الكتابة</h3>
+                        <span class="lesson-badge writing">كتابة</span>
+                    </div>
+                    <div class="lesson-info">
+                        <p>تحسين مهارة الكتابة والتهجئة</p>
+                        <div class="lesson-meta">
+                            <span>👨‍🎓 الصف الثالث</span>
+                            <span>🎯 8 طلاب</span>
+                            <span>⭐ 78% إتقان</span>
+                        </div>
+                    </div>
+                    <div class="lesson-actions">
+                        <button class="btn btn-sm btn-outline">عرض</button>
+                        <button class="btn btn-sm btn-outline">تعديل</button>
+                        <button class="btn btn-sm btn-danger">حذف</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- نموذج إنشاء درس -->
+    <div id="lessonFormModal" class="form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إنشاء درس جديد</h3>
+                <button class="close-modal" onclick="hideLessonForm()">×</button>
+            </div>
+            <form id="lessonForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="lessonTitle">عنوان الدرس</label>
+                        <input type="text" id="lessonTitle" required placeholder="مثال: درس الحروف المتشابهة">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lessonGrade">الصف الدراسي</label>
+                            <select id="lessonGrade" required>
+                                <option value="">اختر الصف</option>
+                                <option value="first">الصف الأول</option>
+                                <option value="second">الصف الثاني</option>
+                                <option value="third">الصف الثالث</option>
+                                <option value="fourth">الصف الرابع</option>
+                                <option value="fifth">الصف الخامس</option>
+                                <option value="sixth">الصف السادس</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lessonType">نوع الدرس</label>
+                            <select id="lessonType" required>
+                                <option value="">اختر النوع</option>
+                                <option value="reading">قراءة</option>
+                                <option value="writing">كتابة</option>
+                                <option value="math">رياضيات</option>
+                                <option value="skills">مهارات</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonDescription">وصف الدرس</label>
+                        <textarea id="lessonDescription" rows="3" placeholder="وصف مختصر عن محتوى الدرس"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="lessonObjectives">الأهداف التعليمية</label>
+                        <textarea id="lessonObjectives" rows="3" placeholder="الأهداف المرجوة من هذا الدرس"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="hideLessonForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">إنشاء الدرس</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // تسجيل الخروج
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                window.location.href = '../login.html';
+            }
+        });
+
+        // إدارة الدروس
+        function showLessonForm() {
+            document.getElementById('lessonFormModal').classList.add('active');
+        }
+
+        function hideLessonForm() {
+            document.getElementById('lessonFormModal').classList.remove('active');
+        }
+
+        document.getElementById('lessonForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم إنشاء الدرس بنجاح!');
+            hideLessonForm();
+        });
+
+        // تنسيقات إضافية للدروس
+        const style = document.createElement('style');
+        style.textContent = `
+            .lessons-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 1.5rem;
+                margin-top: 1.5rem;
+            }
+            .lesson-card {
+                background: white;
+                padding: 1.5rem;
+                border-radius: 10px;
+                box-shadow: var(--shadow);
+                border-left: 4px solid var(--primary-color);
+            }
+            .lesson-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+            }
+            .lesson-header h3 {
+                color: var(--secondary-color);
+                margin: 0;
+            }
+            .lesson-badge {
+                padding: 0.3rem 0.8rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 500;
+            }
+            .lesson-badge.reading {
+                background: #d4edda;
+                color: #155724;
+            }
+            .lesson-badge.writing {
+                background: #cce7ff;
+                color: #004085;
+            }
+            .lesson-info p {
+                color: #666;
+                margin-bottom: 1rem;
+            }
+            .lesson-meta {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                font-size: 0.9rem;
+                color: #888;
+            }
+            .lesson-actions {
+                display: flex;
+                gap: 0.5rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

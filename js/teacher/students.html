@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلاب - ميسر التعلم</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="../images/logo.png" alt="شعار ميسر التعلم" class="logo-image" onerror="this.style.display='none'">
+                    <div class="logo-text">
+                        <h1>ميسر التعلم</h1>
+                        <span>لوحة المعلم</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>مرحباً، أ/ صالح العجلان</span>
+                    <div class="user-avatar">👨‍🏫</div>
+                </div>
+                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
+                <li class="menu-item active"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
+                <li class="menu-item"><a href="tests.html">📝 الاختبارات</a></li>
+                <li class="menu-item"><a href="lessons.html">📚 الدروس</a></li>
+                <li class="menu-item"><a href="handwriting.html">✍️ تحسين الخط</a></li>
+                <li class="menu-item"><a href="homework.html">📋 الواجبات</a></li>
+                <li class="menu-item"><a href="activities.html">🎯 الأنشطة</a></li>
+                <li class="menu-item"><a href="schedule.html">📅 الجدول</a></li>
+                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-content">
+            <div class="content-header">
+                <h1>إدارة الطلاب 👨‍🎓</h1>
+                <p>إضافة وتعديل وحذف حسابات الطلاب</p>
+            </div>
+
+            <div class="table-header">
+                <h3>قائمة الطلاب المسجلين</h3>
+                <div class="table-actions">
+                    <button class="btn btn-primary" onclick="studentsManager.showAddForm()">
+                        ➕ إضافة طالب جديد
+                    </button>
+                    <button class="btn btn-secondary" onclick="studentsManager.exportStudents()">
+                        📥 تصدير البيانات
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الطالب</th>
+                            <th>الصف</th>
+                            <th>النقاط</th>
+                            <th>المستوى</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+                        <!-- يتم تعبئته بالبيانات -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- نموذج إضافة/تعديل طالب -->
+    <div id="studentFormModal" class="form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="studentFormTitle">إضافة طالب جديد</h3>
+                <button class="close-modal" onclick="studentsManager.hideForm()">×</button>
+            </div>
+            <form id="studentForm" onsubmit="studentsManager.saveStudent(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="studentName">اسم الطالب الكامل *</label>
+                        <input type="text" id="studentName" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentUsername">اسم المستخدم *</label>
+                        <input type="text" id="studentUsername" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentPassword">كلمة المرور *</label>
+                        <input type="password" id="studentPassword" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentGrade">الصف الدراسي *</label>
+                        <select id="studentGrade" name="grade" required>
+                            <option value="">اختر الصف</option>
+                            <option value="first">الصف الأول الابتدائي</option>
+                            <option value="second">الصف الثاني الابتدائي</option>
+                            <option value="third">الصف الثالث الابتدائي</option>
+                            <option value="fourth">الصف الرابع الابتدائي</option>
+                            <option value="fifth">الصف الخامس الابتدائي</option>
+                            <option value="sixth">الصف السادس الابتدائي</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentEmail">البريد الإلكتروني</label>
+                        <input type="email" id="studentEmail" name="email">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentPhone">رقم الهاتف</label>
+                        <input type="tel" id="studentPhone" name="phone">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="studentsManager.hideForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ الطالب</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="students.js"></script>
+</body>
+</html>

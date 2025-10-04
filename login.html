@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - ميسر التعلم</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-header">
+            <a href="index.html" class="back-home">
+                <span>← العودة للرئيسية</span>
+            </a>
+            <div class="logo">
+                <img src="images/logo.png" alt="شعار ميسر التعلم" class="logo-image" onerror="this.style.display='none'">
+                <div class="logo-text">
+                    <h1>ميسر التعلم</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="auth-card">
+            <h2>تسجيل الدخول</h2>
+            <p class="auth-subtitle">ادخل بياناتك للوصول إلى حسابك</p>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">نوع الحساب</label>
+                    <select id="role" name="role" required>
+                        <option value="">اختر نوع الحساب</option>
+                        <option value="teacher">معلم</option>
+                        <option value="student">طالب</option>
+                        <option value="committee">عضو لجنة</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">تسجيل الدخول</button>
+            </form>
+
+            <div class="demo-accounts">
+                <h4>حسابات تجريبية للاختبار:</h4>
+                <div class="demo-account">
+                    <strong>المعلم:</strong> teacher / 123456
+                </div>
+                <div class="demo-account">
+                    <strong>الطالب 1:</strong> student1 / 123456
+                </div>
+                <div class="demo-account">
+                    <strong>الطالب 2:</strong> student2 / 123456
+                </div>
+                <div class="demo-account">
+                    <strong>اللجنة:</strong> committee / 123456
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/database.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
