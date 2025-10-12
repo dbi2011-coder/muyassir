@@ -19,6 +19,8 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             width: 300px;
+            direction: rtl; /* لجعل المحتوى من اليمين لليسار */
+            text-align: right; /* لجعل النص محاذي لليمين */
         }
         h2 {
             text-align: center;
@@ -35,6 +37,8 @@
             margin-bottom: 1rem;
             border: 1px solid #ccc;
             border-radius: 4px;
+            direction: ltr; /* لجعل الحقول تكتب من اليسار لليمين */
+            text-align: left;
         }
         button {
             width: 100%;
@@ -44,10 +48,20 @@
             border: none;
             border-radius: 4px;
             font-size: 1rem;
+            cursor: pointer;
         }
         button:hover {
             background-color: #0056b3;
-            cursor:pointer;
+        }
+        .message {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
         }
     </style>
 </head>
@@ -72,6 +86,7 @@
 
             <button type="submit">تسجيل دخول</button>
         </form>
+        <div id="message" class="message"></div>
     </div>
 
     <script src="js/database.js"></script>
