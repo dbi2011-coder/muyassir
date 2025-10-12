@@ -5,7 +5,6 @@ class Database {
 
     init() {
         if (!localStorage.getItem('muyassir_initialized')) {
-            // قاعدة بيانات فارغة بدون حسابات مسبقة
             localStorage.setItem('muyassir_users', JSON.stringify([]));
             localStorage.setItem('muyassir_initialized', 'true');
         }
