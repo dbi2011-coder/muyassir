@@ -1,49 +1,45 @@
-class Database {
+class Auth {
     constructor() {
+        this.loginForm = document.getElementById('loginForm');
         this.init();
     }
 
     init() {
-        if (!localStorage.getItem('muyassir_users')) {
-            this.initializeOwnersOnly();
+        if (this.loginForm) {
+            this.loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.login();
+            });
         }
     }
 
-    initializeOwnersOnly() {
-        const users = [
-            {
-                id: 1,
-                username: 'owner',
-                password: 'admin123',
-                role: 'teacher',
-                name: 'مالك النظام',
-                email: 'owner@muyassir.com',
-                phone: '0500000000'
-            }
-        ];
+    login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
 
-        localStorage.setItem('muyassir_users', JSON.stringify(users));
-        localStorage.setItem('muyassir_students', JSON.stringify([]));
-        localStorage.setItem('muyassir_tests', JSON.stringify([]));
-        localStorage.setItem('muyassir_lessons', JSON.stringify([]));
-        localStorage.setItem('muyassir_homework', JSON.stringify([]));
-        localStorage.setItem('muyassir_activities', JSON.stringify([]));
-        localStorage.setItem('muyassir_schedule', JSON.stringify([]));
-        localStorage.setItem('muyassir_handwriting', JSON.stringify([]));
-        localStorage.setItem('muyassir_rewards', JSON.stringify([]));
-        localStorage.setItem('muyassir_initialized', 'true');
+        const user = database.findUser(username, password, role);
 
-        console.log('تم تهيئة قاعدة البيانات بحساب مالك واحد.');
-    }
+        if (!user) {
+            alert('بيانات الدخول غير صحيحة!');
+            return;
+        }
 
-    getUsers() {
-        return JSON.parse(localStorage.getItem('muyassir_users') || '[]');
-    }
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        alert(`مرحباً ${user.name}!`);
 
-    findUser(username, password, role) {
-        const users = this.getUsers();
-        return users.find(user => user.username === username && user.password === password && user.role === role);
+        if (role === 'teacher') {
+            window.location.href = 'teacher/dashboard.html';
+        } else if (role === 'student') {
+            window.location.href = 'student/dashboard.html';
+        } else if (role === 'committee') {
+            window.location.href = 'committee/dashboard.html';
+        } else {
+            alert('نوع الحساب غير معروف');
+        }
     }
 }
 
-const database = new Database();
+document.addEventListener('DOMContentLoaded', () => {
+    new Auth();
+});
