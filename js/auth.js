@@ -7,7 +7,7 @@ class Auth {
 
     init() {
         if (this.loginForm) {
-            this.loginForm.addEventListener('submit', (e) => {
+            this.loginForm.addEventListener('submit', e => {
                 e.preventDefault();
                 this.login();
             });
@@ -21,11 +21,7 @@ class Auth {
 
     showMessage(text, isSuccess) {
         this.messageDiv.textContent = text;
-        if (isSuccess) {
-            this.messageDiv.classList.add('success');
-        } else {
-            this.messageDiv.classList.add('error');
-        }
+        this.messageDiv.className = 'message ' + (isSuccess ? 'success' : 'error');
     }
 
     login() {
