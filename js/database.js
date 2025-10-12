@@ -4,18 +4,19 @@ class Database {
     }
 
     init() {
-        if (!localStorage.getItem('muyassir_users')) {
-            this.initializeOwnersOnly();
-        }
+        // حذف الحسابات السابقة واعادة التهيئة بسجل المالك فقط
+        localStorage.clear();
+
+        this.initializeOwnerOnly();
     }
 
-    initializeOwnersOnly() {
+    initializeOwnerOnly() {
         const users = [
             {
                 id: 1,
                 username: 'owner',
                 password: 'admin123',
-                role: 'teacher',
+                role: 'owner',
                 name: 'مالك النظام',
                 email: 'owner@muyassir.com',
                 phone: '0500000000'
@@ -32,7 +33,7 @@ class Database {
         localStorage.setItem('muyassir_rewards', JSON.stringify([]));
         localStorage.setItem('muyassir_initialized', 'true');
 
-        console.log('تم تهيئة قاعدة البيانات بحساب مالك واحد.');
+        console.log('تم تهيئة قاعدة البيانات بحساب مالك النظام فقط.');
     }
 
     getUsers() {
