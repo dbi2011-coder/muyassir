@@ -1,6 +1,7 @@
 class Auth {
     constructor() {
         this.loginForm = document.getElementById('loginForm');
+        this.messageDiv = document.getElementById('message');
         this.init();
     }
 
@@ -13,7 +14,23 @@ class Auth {
         }
     }
 
+    clearMessage() {
+        this.messageDiv.textContent = '';
+        this.messageDiv.className = 'message';
+    }
+
+    showMessage(text, isSuccess) {
+        this.messageDiv.textContent = text;
+        if (isSuccess) {
+            this.messageDiv.classList.add('success');
+        } else {
+            this.messageDiv.classList.add('error');
+        }
+    }
+
     login() {
+        this.clearMessage();
+
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
         const role = document.getElementById('role').value;
@@ -21,29 +38,31 @@ class Auth {
         const user = database.findUser(username, password, role);
 
         if (!user) {
-            alert('بيانات الدخول غير صحيحة!');
+            this.showMessage('بيانات الدخول غير صحيحة!', false);
             return;
         }
 
         localStorage.setItem('currentUser', JSON.stringify(user));
-        alert(`مرحباً ${user.name}!`);
+        this.showMessage(`مرحباً ${user.name}! جاري التحويل...`, true);
 
-        switch(role) {
-            case 'owner':
-                window.location.href = 'owner/dashboard.html';
-                break;
-            case 'teacher':
-                window.location.href = 'teacher/dashboard.html';
-                break;
-            case 'student':
-                window.location.href = 'student/dashboard.html';
-                break;
-            case 'committee':
-                window.location.href = 'committee/dashboard.html';
-                break;
-            default:
-                alert('دور المستخدم غير معروف!');
-        }
+        setTimeout(() => {
+            switch(role) {
+                case 'owner':
+                    window.location.href = 'owner/dashboard.html';
+                    break;
+                case 'teacher':
+                    window.location.href = 'teacher/dashboard.html';
+                    break;
+                case 'student':
+                    window.location.href = 'student/dashboard.html';
+                    break;
+                case 'committee':
+                    window.location.href = 'committee/dashboard.html';
+                    break;
+                default:
+                    this.showMessage('دور المستخدم غير معروف!', false);
+            }
+        }, 1500);
     }
 }
 
