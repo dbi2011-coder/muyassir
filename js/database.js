@@ -16,7 +16,7 @@ class Database {
                 id: 1,
                 username: 'owner',
                 password: 'admin123',
-                role: 'owner',
+                role: 'owner',  // تم تعديل الدور هنا إلى owner
                 name: 'مالك النظام',
                 email: 'owner@muyassir.com',
                 phone: '0500000000'
