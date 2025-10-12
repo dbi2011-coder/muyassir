@@ -21,7 +21,6 @@ class Database {
                 phone: '0500000000'
             }
         ];
-
         localStorage.setItem('muyassir_users', JSON.stringify(users));
         localStorage.setItem('muyassir_students', JSON.stringify([]));
         localStorage.setItem('muyassir_tests', JSON.stringify([]));
