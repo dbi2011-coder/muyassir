@@ -13,11 +13,17 @@
     .message { margin-top: 1rem; font-weight: bold; }
     .success { color: green; }
     .error { color: red; }
+    table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
+    th, td { border: 1px solid #ddd; padding: 0.5rem; }
+    th { background-color: #f9f9f9; }
+    button.edit, button.delete { margin-right: 0.5rem; }
 </style>
 </head>
 <body>
-<h1>إضافة معلم جديد</h1>
+<h1>إدارة المعلمين</h1>
 <form id="teacherForm">
+    <label for="fullName">اسم المعلم:</label>
+    <input type="text" id="fullName" required />
     <label for="username">اسم المستخدم:</label>
     <input type="text" id="username" required />
     <label for="password">كلمة المرور:</label>
@@ -26,40 +32,135 @@
 </form>
 <div id="message"></div>
 
+<table id="teachersTable">
+    <thead>
+        <tr>
+            <th>اسم المعلم</th>
+            <th>اسم المستخدم</th>
+            <th>كلمة المرور</th>
+            <th>إجراءات</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
 <script src="../js/database.js"></script>
 <script>
-class UserManager {
+class TeacherManager {
     constructor() {
         this.users = database.getUsers();
         this.messageDiv = document.getElementById('message');
-        document.getElementById('teacherForm').addEventListener('submit', e => {
+        this.form = document.getElementById('teacherForm');
+        this.tableBody = document.querySelector('#teachersTable tbody');
+        this.editingId = null;
+
+        this.form.addEventListener('submit', e => {
             e.preventDefault();
-            this.addTeacher();
+            if(this.editingId) {
+                this.updateTeacher();
+            } else {
+                this.addTeacher();
+            }
         });
+
+        this.renderTable();
     }
-    saveUsers() {
-        database.saveUsers(this.users);
-    }
-    showMessage(text, isSuccess = true) {
-        this.messageDiv.textContent = text;
+
+    showMessage(msg, isSuccess=true) {
+        this.messageDiv.textContent = msg;
         this.messageDiv.className = isSuccess ? 'message success' : 'message error';
         setTimeout(() => { this.messageDiv.textContent = ''; }, 3000);
     }
+
     addTeacher() {
+        const fullName = document.getElementById('fullName').value.trim();
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
-        if (this.users.find(u => u.username === username)) {
+
+        if(this.users.find(u => u.username === username)) {
             this.showMessage('اسم المستخدم موجود مسبقاً', false);
             return;
         }
-        this.users.push({ id: Date.now(), username, password, role: 'teacher', name: '', email: '', phone: '' });
-        this.saveUsers();
+        const newTeacher = {
+            id: Date.now(),
+            name: fullName,
+            username,
+            password,
+            role: 'teacher',
+            permissions: ['addStudent', 'addCommitteeMember', 'manageStudents', 'manageCommittee']
+        };
+
+        this.users.push(newTeacher);
+        database.saveUsers(this.users);
+
         this.showMessage('تم إضافة المعلم بنجاح');
-        document.getElementById('teacherForm').reset();
+        this.form.reset();
+        this.renderTable();
+    }
+
+    renderTable() {
+        this.tableBody.innerHTML = '';
+        this.users.filter(u => u.role === 'teacher').forEach(teacher => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${teacher.name}</td>
+                <td>${teacher.username}</td>
+                <td>${teacher.password}</td>
+                <td>
+                    <button class="edit" onclick="teacherManager.editTeacher(${teacher.id})">تعديل</button>
+                    <button class="delete" onclick="teacherManager.deleteTeacher(${teacher.id})">حذف</button>
+                </td>
+            `;
+            this.tableBody.appendChild(tr);
+        });
+    }
+
+    editTeacher(id) {
+        const teacher = this.users.find(u => u.id === id);
+        if(!teacher) return;
+        document.getElementById('fullName').value = teacher.name;
+        document.getElementById('username').value = teacher.username;
+        document.getElementById('password').value = teacher.password;
+        this.editingId = id;
+    }
+
+    updateTeacher() {
+        const fullName = document.getElementById('fullName').value.trim();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        if(this.users.some(u => u.username === username && u.id !== this.editingId)) {
+            this.showMessage('اسم المستخدم موجود مسبقاً', false);
+            return;
+        }
+        const teacher = this.users.find(u => u.id === this.editingId);
+        if(!teacher) return;
+        teacher.name = fullName;
+        teacher.username = username;
+        teacher.password = password;
+        database.saveUsers(this.users);
+        this.showMessage('تم تحديث بيانات المعلم');
+        this.form.reset();
+        this.editingId = null;
+        this.renderTable();
+    }
+
+    deleteTeacher(id) {
+        if(!confirm('هل تريد حذف هذا المعلم وجميع طلابه وأعضاء لجنة؟')) return;
+
+        // حذف المعلم
+        this.users = this.users.filter(u => u.id !== id);
+
+        // حذف طلاب وأعضاء لجنة مرتبطين بالمعلم
+        this.users = this.users.filter(user => user.teacherId !== id);
+
+        database.saveUsers(this.users);
+        this.showMessage('تم حذف المعلم وجميع طلابه وأعضاء لجنة المرتبطين به');
+        this.renderTable();
     }
 }
 
-new UserManager();
+const teacherManager = new TeacherManager();
+window.teacherManager = teacherManager;
 </script>
 </body>
 </html>
