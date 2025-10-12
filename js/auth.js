@@ -28,10 +28,21 @@ class Auth {
         localStorage.setItem('currentUser', JSON.stringify(user));
         alert(`مرحباً ${user.name}!`);
 
-        if (role === 'owner') {
-            window.location.href = 'owner/dashboard.html'; // صفحة المالك
-        } else {
-            alert('هذا النظام مخصص حالياً فقط لحساب المالك.');
+        switch(role) {
+            case 'owner':
+                window.location.href = 'owner/dashboard.html';
+                break;
+            case 'teacher':
+                window.location.href = 'teacher/dashboard.html';
+                break;
+            case 'student':
+                window.location.href = 'student/dashboard.html';
+                break;
+            case 'committee':
+                window.location.href = 'committee/dashboard.html';
+                break;
+            default:
+                alert('دور المستخدم غير معروف!');
         }
     }
 }
