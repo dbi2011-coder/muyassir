@@ -39,25 +39,28 @@ class Auth {
         }
 
         localStorage.setItem('currentUser', JSON.stringify(user));
-        this.showMessage(`مرحباً ${user.name}! جاري التحويل...`, true);
+        this.showMessage(`مرحباً ${user.name || user.username}! جاري التحويل...`, true);
 
         setTimeout(() => {
+            let redirectPage = '';
             switch(role) {
                 case 'owner':
-                    window.location.href = 'owner/dashboard.html';
+                    redirectPage = 'owner/manage-users.html';
                     break;
                 case 'teacher':
-                    window.location.href = 'teacher/dashboard.html';
+                    redirectPage = 'teacher/manage-users.html';
                     break;
                 case 'student':
-                    window.location.href = 'student/dashboard.html';
+                    redirectPage = 'student/dashboard.html';
                     break;
                 case 'committee':
-                    window.location.href = 'committee/dashboard.html';
+                    redirectPage = 'committee/dashboard.html';
                     break;
                 default:
                     this.showMessage('دور المستخدم غير معروف!', false);
+                    return;
             }
+            window.location.href = redirectPage;
         }, 1500);
     }
 }
