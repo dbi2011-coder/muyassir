@@ -1,54 +1,49 @@
-class Auth {
+class Database {
     constructor() {
-        this.loginForm = document.getElementById('loginForm');
         this.init();
     }
 
     init() {
-        if (this.loginForm) {
-            this.loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                this.login();
-            });
+        if (!localStorage.getItem('muyassir_users')) {
+            this.initializeOwnersOnly();
         }
     }
 
-    login() {
-        const usernameInput = document.getElementById('username');
-        const passwordInput = document.getElementById('password');
-        const roleSelect = document.getElementById('role');
+    initializeOwnersOnly() {
+        const users = [
+            {
+                id: 1,
+                username: 'owner',
+                password: 'admin123',
+                role: 'teacher',
+                name: 'مالك النظام',
+                email: 'owner@muyassir.com',
+                phone: '0500000000'
+            }
+        ];
 
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value;
-        const role = roleSelect.value;
+        localStorage.setItem('muyassir_users', JSON.stringify(users));
+        localStorage.setItem('muyassir_students', JSON.stringify([]));
+        localStorage.setItem('muyassir_tests', JSON.stringify([]));
+        localStorage.setItem('muyassir_lessons', JSON.stringify([]));
+        localStorage.setItem('muyassir_homework', JSON.stringify([]));
+        localStorage.setItem('muyassir_activities', JSON.stringify([]));
+        localStorage.setItem('muyassir_schedule', JSON.stringify([]));
+        localStorage.setItem('muyassir_handwriting', JSON.stringify([]));
+        localStorage.setItem('muyassir_rewards', JSON.stringify([]));
+        localStorage.setItem('muyassir_initialized', 'true');
 
-        const user = database.findUser(username, password, role);
+        console.log('تم تهيئة قاعدة البيانات بحساب مالك واحد.');
+    }
 
-        if (!user) {
-            alert('بيانات الدخول غير صحيحة! يرجى المحاولة مرة أخرى.');
-            return;
-        }
+    getUsers() {
+        return JSON.parse(localStorage.getItem('muyassir_users') || '[]');
+    }
 
-        // حفظ المستخدم الحالي في LocalStorage (للعدم فقدان الحالة)
-        localStorage.setItem('currentUser', JSON.stringify(user));
-
-        alert(`مرحباً، ${user.name}! تم تسجيل الدخول بنجاح.`);
-
-        // تحويل المستخدم للصفحة المناسبة بناء على الدور
-        if (role === 'teacher') {
-            window.location.href = 'teacher/dashboard.html';
-        } else if (role === 'student') {
-            window.location.href = 'student/dashboard.html';
-        } else if (role === 'committee') {
-            window.location.href = 'committee/dashboard.html';
-        } else {
-            // حال لم يكن الدور معروف
-            alert('نوع الحساب غير معروف');
-        }
+    findUser(username, password, role) {
+        const users = this.getUsers();
+        return users.find(user => user.username === username && user.password === password && user.role === role);
     }
 }
 
-// تهيئة كائن التوثيق فور تحميل الصفحة
-document.addEventListener('DOMContentLoaded', () => {
-    new Auth();
-});
+const database = new Database();
