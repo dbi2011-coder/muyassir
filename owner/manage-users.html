@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المعلمين - مدير النظام</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 2rem; direction: rtl; text-align: right; }
+    label { display: block; margin-top: 1rem; }
+    input { width: 100%; padding: 0.5rem; margin-top: 0.2rem; }
+    button { margin-top: 1rem; padding: 0.6rem 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
+    .message { margin-top: 1rem; font-weight: bold; }
+    .success { color: green; }
+    .error { color: red; }
+</style>
+</head>
+<body>
+<h1>إضافة معلم جديد</h1>
+<form id="teacherForm">
+    <label for="username">اسم المستخدم:</label>
+    <input type="text" id="username" required />
+    <label for="password">كلمة المرور:</label>
+    <input type="password" id="password" required />
+    <button type="submit">إضافة معلم</button>
+</form>
+<div id="message"></div>
+
+<script>
+class UserManager {
+    constructor() {
+        this.usersKey = 'muyassir_users';
+        this.users = JSON.parse(localStorage.getItem(this.usersKey) || '[]');
+        this.messageDiv = document.getElementById('message');
+        document.getElementById('teacherForm').addEventListener('submit', e => {
+            e.preventDefault();
+            this.addTeacher();
+        });
+    }
+    saveUsers() {
+        localStorage.setItem(this.usersKey, JSON.stringify(this.users));
+    }
+    showMessage(text, isSuccess = true) {
+        this.messageDiv.textContent = text;
+        this.messageDiv.className = isSuccess ? 'message success' : 'message error';
+        setTimeout(()=>{ this.messageDiv.textContent = ''; }, 3000);
+    }
+    addTeacher() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        if(this.users.find(u => u.username === username)) {
+            this.showMessage('اسم المستخدم موجود مسبقاً', false);
+            return;
+        }
+        const newUser = { id: Date.now(), username, password, role: 'teacher', name: '', email: '', phone: '' };
+        this.users.push(newUser);
+        this.saveUsers();
+        this.showMessage('تم إضافة المعلم بنجاح');
+        document.getElementById('teacherForm').reset();
+    }
+}
+new UserManager();
+</script>
+
+</body>
+</html>
