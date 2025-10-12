@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير - ميسر التعلم</title>
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/teacher.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark teacher-nav">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-hand-holding-heart"></i>
+                ميسر التعلم
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="dashboard.html">الرئيسية</a>
+                <a class="nav-link" href="students.html">الطلاب</a>
+                <a class="nav-link" href="tests.html">الاختبارات</a>
+                <a class="nav-link" href="lessons.html">الدروس</a>
+                <a class="nav-link" href="handwriting.html">تحسين الخط</a>
+                <a class="nav-link" href="homework.html">الواجبات</a>
+                <a class="nav-link" href="activities.html">الأنشطة</a>
+                <a class="nav-link" href="schedule.html">الجداول</a>
+                <a class="nav-link active" href="reports.html">التقارير</a>
+                <a class="nav-link" href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="dashboard-header">
+                    <h2><i class="fas fa-chart-bar"></i> التقارير والإحصائيات</h2>
+                    <p>متابعة تقدم الطلاب وتحليل الأداء</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>نظرة عامة</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="overviewReports">
+                            <!-- سيتم تعبئة النظرة العامة هنا -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>تقرير الطالب</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">اختر الطالب</label>
+                            <select class="form-control" id="studentSelect">
+                                <!-- سيتم تعبئة الطلاب هنا -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">نوع التقرير</label>
+                            <select class="form-control" id="reportType">
+                                <option value="academic">أكاديمي</option>
+                                <option value="behavioral">سلوكي</option>
+                                <option value="comprehensive">شامل</option>
+                            </select>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">من تاريخ</label>
+                                <input type="date" class="form-control" id="startDate">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">إلى تاريخ</label>
+                                <input type="date" class="form-control" id="endDate">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-100" id="generateReportBtn">
+                            <i class="fas fa-file-pdf"></i> إنشاء التقرير
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>إحصائيات سريعة</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-stats">
+                            <div class="stat-item">
+                                <span>إجمالي الطلاب:</span>
+                                <strong id="totalStudents">0</strong>
+                            </div>
+                            <div class="stat-item">
+                                <span>متوسط التقدم:</span>
+                                <strong id="avgProgress">0%</strong>
+                            </div>
+                            <div class="stat-item">
+                                <span>الاختبارات المجراة:</span>
+                                <strong id="totalTests">0</strong>
+                            </div>
+                            <div class="stat-item">
+                                <span>الدروس المصممة:</span>
+                                <strong id="totalLessons">0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">نتيجة التقرير</h5>
+                        <div>
+                            <button class="btn btn-success me-2" id="printReportBtn" style="display: none;">
+                                <i class="fas fa-print"></i> طباعة
+                            </button>
+                            <button class="btn btn-info" id="exportReportBtn" style="display: none;">
+                                <i class="fas fa-download"></i> تصدير
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="reportResults">
+                            <p class="text-muted text-center">سيظهر التقرير هنا بعد إنشائه</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5>مقارنة الفترات</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>مقارنة أداء الطلاب بين فترات مختلفة</p>
+                        <button class="btn btn-outline-primary" id="comparePeriodsBtn">
+                            <i class="fas fa-chart-line"></i> عرض المقارنة
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>ميسر التعلم &copy; <span id="currentYear"></span> - أ/ صالح عبد العزيز عبد الله العجلان</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/teacher/reports.js"></script>
+</body>
+</html>

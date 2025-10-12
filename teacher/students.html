@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلاب - ميسر التعلم</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">
+                    <h1>ميسر التعلم</h1>
+                    <span>لوحة المعلم</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>مرحباً، أ/ صالح العجلان</span>
+                    <div class="user-avatar">👨‍🏫</div>
+                </div>
+                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
+                <li class="menu-item active"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
+                <li class="menu-item"><a href="tests.html">📝 الاختبارات</a></li>
+                <li class="menu-item"><a href="lessons.html">📚 الدروس</a></li>
+                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-content">
+            <div class="content-header">
+                <h1>إدارة الطلاب 👨‍🎓</h1>
+                <p>إضافة وتعديل وحذف حسابات الطلاب</p>
+            </div>
+
+            <div class="table-header">
+                <h3>قائمة الطلاب المسجلين</h3>
+                <div class="table-actions">
+                    <button class="btn btn-primary" onclick="showStudentForm()">
+                        ➕ إضافة طالب جديد
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>اسم الطالب</th>
+                            <th>الصف الدراسي</th>
+                            <th>الحالة</th>
+                            <th>تاريخ التسجيل</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTable">
+                        <tr>
+                            <td>1</td>
+                            <td>محمد أحمد</td>
+                            <td>الثاني الابتدائي</td>
+                            <td><span class="status-badge active">نشط</span></td>
+                            <td>2024-01-15</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline">تعديل</button>
+                                <button class="btn btn-sm btn-danger">حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>فاطمة علي</td>
+                            <td>الثالث الابتدائي</td>
+                            <td><span class="status-badge active">نشط</span></td>
+                            <td>2024-01-10</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline">تعديل</button>
+                                <button class="btn btn-sm btn-danger">حذف</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- نموذج إضافة طالب -->
+    <div id="studentFormModal" class="form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>إضافة طالب جديد</h3>
+                <button class="close-modal" onclick="hideStudentForm()">×</button>
+            </div>
+            <form id="studentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="studentName">اسم الطالب الكامل</label>
+                        <input type="text" id="studentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentGrade">الصف الدراسي</label>
+                        <select id="studentGrade" required>
+                            <option value="">اختر الصف</option>
+                            <option value="first">الصف الأول</option>
+                            <option value="second">الصف الثاني</option>
+                            <option value="third">الصف الثالث</option>
+                            <option value="fourth">الصف الرابع</option>
+                            <option value="fifth">الصف الخامس</option>
+                            <option value="sixth">الصف السادس</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentUsername">اسم المستخدم</label>
+                        <input type="text" id="studentUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPassword">كلمة المرور</label>
+                        <input type="password" id="studentPassword" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="hideStudentForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ الطالب</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // تسجيل الخروج
+        document.querySelector('.logout-btn').addEventListener('click', function() {
+            if (confirm('هل تريد تسجيل الخروج؟')) {
+                window.location.href = '../login.html';
+            }
+        });
+
+        // إدارة الطلاب
+        function showStudentForm() {
+            document.getElementById('studentFormModal').classList.add('active');
+        }
+
+        function hideStudentForm() {
+            document.getElementById('studentFormModal').classList.remove('active');
+        }
+
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم إضافة الطالب بنجاح!');
+            hideStudentForm();
+        });
+
+        // إضافة تنسيق للشعارات
+        const style = document.createElement('style');
+        style.textContent = `
+            .status-badge {
+                padding: 0.3rem 0.8rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 500;
+            }
+            .status-badge.active {
+                background: #d4edda;
+                color: #155724;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

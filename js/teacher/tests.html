@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الاختبارات التشخيصية - ميسر التعلم</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/teacher.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="../images/logo.png" alt="شعار ميسر التعلم" class="logo-image" onerror="this.style.display='none'">
+                    <div class="logo-text">
+                        <h1>ميسر التعلم</h1>
+                        <span>لوحة المعلم</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span>مرحباً، أ/ صالح العجلان</span>
+                    <div class="user-avatar">👨‍🏫</div>
+                </div>
+                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
+                <li class="menu-item"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
+                <li class="menu-item active"><a href="tests.html">📝 الاختبارات</a></li>
+                <li class="menu-item"><a href="lessons.html">📚 الدروس</a></li>
+                <li class="menu-item"><a href="handwriting.html">✍️ تحسين الخط</a></li>
+                <li class="menu-item"><a href="homework.html">📋 الواجبات</a></li>
+                <li class="menu-item"><a href="activities.html">🎯 الأنشطة</a></li>
+                <li class="menu-item"><a href="schedule.html">📅 الجدول</a></li>
+                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
+            </ul>
+        </nav>
+
+        <main class="dashboard-content">
+            <div class="content-header">
+                <h1>الاختبارات التشخيصية 📝</h1>
+                <p>إنشاء وإدارة الاختبارات التشخيصية للطلاب</p>
+            </div>
+
+            <div class="tests-actions">
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="testsManager.showTestForm()">
+                        ➕ إنشاء اختبار جديد
+                    </button>
+                    <button class="btn btn-secondary" onclick="testsManager.showTemplateLibrary()">
+                        📚 مكتبة النماذج
+                    </button>
+                </div>
+
+                <div class="filters">
+                    <select id="gradeFilter">
+                        <option value="">جميع الصفوف</option>
+                        <option value="first">الصف الأول</option>
+                        <option value="second">الصف الثاني</option>
+                        <option value="third">الصف الثالث</option>
+                        <option value="fourth">الصف الرابع</option>
+                        <option value="fifth">الصف الخامس</option>
+                        <option value="sixth">الصف السادس</option>
+                    </select>
+                    
+                    <select id="subjectFilter">
+                        <option value="">جميع المواد</option>
+                        <option value="reading">القراءة</option>
+                        <option value="writing">الكتابة</option>
+                        <option value="math">الرياضيات</option>
+                        <option value="skills">المهارات</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="tests-grid" id="testsContainer">
+                <!-- يتم تعبئته بالبيانات -->
+            </div>
+        </main>
+    </div>
+
+    <!-- نموذج إنشاء اختبار -->
+    <div id="testFormModal" class="form-modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 id="testFormTitle">إنشاء اختبار تشخيصي جديد</h3>
+                <button class="close-modal" onclick="testsManager.hideTestForm()">×</button>
+            </div>
+            <form id="testForm" onsubmit="testsManager.saveTest(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="testTitle">عنوان الاختبار *</label>
+                        <input type="text" id="testTitle" name="title" required placeholder="مثال: الاختبار التشخيصي للصف الثاني - القراءة">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testGrade">الصف الدراسي *</label>
+                            <select id="testGrade" name="grade" required>
+                                <option value="">اختر الصف</option>
+                                <option value="first">الصف الأول الابتدائي</option>
+                                <option value="second">الصف الثاني الابتدائي</option>
+                                <option value="third">الصف الثالث الابتدائي</option>
+                                <option value="fourth">الصف الرابع الابتدائي</option>
+                                <option value="fifth">الصف الخامس الابتدائي</option>
+                                <option value="sixth">الصف السادس الابتدائي</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testSubject">المادة *</label>
+                            <select id="testSubject" name="subject" required>
+                                <option value="">اختر المادة</option>
+                                <option value="reading">القراءة</option>
+                                <option value="writing">الكتابة</option>
+                                <option value="math">الرياضيات</option>
+                                <option value="skills">المهارات الأساسية</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="testDescription">وصف الاختبار</label>
+                        <textarea id="testDescription" name="description" rows="3" placeholder="وصف مختصر عن محتوى الاختبار وأهدافه..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testDuration">مدة الاختبار (دقيقة)</label>
+                            <input type="number" id="testDuration" name="duration" min="5" max="180" value="30">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testPassingScore">درجة النجاح (%)</label>
+                            <input type="number" id="testPassingScore" name="passingScore" min="0" max="100" value="60">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="testsManager.hideTestForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ وإنشاء الأسئلة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نموذج إدارة الأسئلة -->
+    <div id="questionsModal" class="form-modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3 id="questionsModalTitle">إدارة أسئلة الاختبار</h3>
+                <button class="close-modal" onclick="testsManager.hideQuestionsModal()">×</button>
+            </div>
+            <div class="questions-container">
+                <div class="questions-header">
+                    <h4>أسئلة الاختبار</h4>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="testsManager.showQuestionForm()">
+                        <span>➕</span> إضافة سؤال
+                    </button>
+                </div>
+                <div class="questions-list" id="questionsList">
+                    <!-- يتم تعبئته بالأسئلة -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="testsManager.hideQuestionsModal()">إغلاق</button>
+                <button type="button" class="btn btn-primary" onclick="testsManager.finalizeTest()">إنهاء وحفظ الاختبار</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج إضافة سؤال -->
+    <div id="questionFormModal" class="form-modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h3 id="questionFormTitle">إضافة سؤال جديد</h3>
+                <button class="close-modal" onclick="testsManager.hideQuestionForm()">×</button>
+            </div>
+            <form id="questionForm" onsubmit="testsManager.saveQuestion(event)">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="questionType">نوع السؤال *</label>
+                        <select id="questionType" name="type" required onchange="testsManager.handleQuestionTypeChange()">
+                            <option value="">اختر نوع السؤال</option>
+                            <option value="multiple_choice">اختيار من متعدد</option>
+                            <option value="multiple_answer">اختيار متعدد الإجابات</option>
+                            <option value="essay">سؤال مقالي</option>
+                            <option value="drag_drop">سحب وإفلات</option>
+                            <option value="image_based">سؤال بالصورة</option>
+                            <option value="video_based">سؤال بالفيديو</option>
+                            <option value="audio_based">سؤال صوتي</option>
+                            <option value="reading">سؤال قراءة</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label for="questionText">نص السؤال *</label>
+                        <textarea id="questionText" name="text" rows="3" required placeholder="اكتب نص السؤال هنا..."></textarea>
+                    </div>
+                    
+                    <!-- خيارات الاختيار من متعدد -->
+                    <div id="multipleChoiceOptions" class="question-options hidden">
+                        <div class="options-header">
+                            <label>خيارات الإجابة</label>
+                            <button type="button" class="btn btn-sm btn-outline" onclick="testsManager.addOption()">إضافة خيار</button>
+                        </div>
+                        <div class="options-list" id="optionsList">
+                            <!-- يتم إضافة الخيارات هنا -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="questionPoints">الدرجة</label>
+                        <input type="number" id="questionPoints" name="points" min="1" max="100" value="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="questionObjective">الهدف التعليمي</label>
+                        <input type="text" id="questionObjective" name="objective" placeholder="الهدف المرتبط بهذا السؤال">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="testsManager.hideQuestionForm()">إلغاء</button>
+                    <button type="submit" class="btn btn-primary">حفظ السؤال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="tests.js"></script>
+    
+    <style>
+        .tests-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .filters select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .tests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .test-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .test-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .test-info h3 {
+            margin: 0 0 0.5rem 0;
+            color: #2c3e50;
+        }
+        
+        .test-meta {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .test-actions {
+            display: flex;
+            gap: 0.3rem;
+        }
+        
+        .test-content {
+            padding: 1.5rem;
+        }
+        
+        .test-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .test-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .test-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
+        .detail-label {
+            color: #666;
+        }
+        
+        .detail-value {
+            font-weight: 500;
+        }
+        
+        .test-footer {
+            padding: 1rem 1.5rem;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .questions-container {
+            margin-bottom: 2rem;
+        }
+        
+        .questions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .question-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid #3498db;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .question-number {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .question-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .question-text {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        
+        .question-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .question-options {
+            margin-top: 1rem;
+        }
+        
+        .options-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .option-text {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .option-correct-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #ddd;
+        }
+        
+        @media (max-width: 768px) {
+            .tests-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .tests-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

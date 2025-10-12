@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجداول - ميسر التعلم</title>
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/teacher.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark teacher-nav">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-hand-holding-heart"></i>
+                ميسر التعلم
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="dashboard.html">الرئيسية</a>
+                <a class="nav-link" href="students.html">الطلاب</a>
+                <a class="nav-link" href="tests.html">الاختبارات</a>
+                <a class="nav-link" href="lessons.html">الدروس</a>
+                <a class="nav-link" href="handwriting.html">تحسين الخط</a>
+                <a class="nav-link" href="homework.html">الواجبات</a>
+                <a class="nav-link" href="activities.html">الأنشطة</a>
+                <a class="nav-link active" href="schedule.html">الجداول</a>
+                <a class="nav-link" href="reports.html">التقارير</a>
+                <a class="nav-link" href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12">
+                <div class="dashboard-header">
+                    <h2><i class="fas fa-calendar-alt"></i> الجداول الدراسية</h2>
+                    <p>إدارة جدول الحصص والجداول الدراسية</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">جدول الحصص الأسبوعي</h5>
+                        <div>
+                            <button class="btn btn-primary me-2" id="addSessionBtn">
+                                <i class="fas fa-plus"></i> إضافة حصة
+                            </button>
+                            <button class="btn btn-success me-2" id="saveScheduleBtn">
+                                <i class="fas fa-save"></i> حفظ الجدول
+                            </button>
+                            <button class="btn btn-info" id="printScheduleBtn">
+                                <i class="fas fa-print"></i> طباعة الجدول
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="scheduleContainer">
+                            <!-- سيتم تعبئة الجدول هنا -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>جدول اليوم</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="todaysSchedule">
+                            <!-- سيتم تعبئة جدول اليوم هنا -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>إحصائيات الجدول</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">📅</div>
+                                <div class="stat-info">
+                                    <h3 id="totalSessions">0</h3>
+                                    <p>إجمالي الحصص</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">👨‍🎓</div>
+                                <div class="stat-info">
+                                    <h3 id="scheduledSessions">0</h3>
+                                    <p>حصص مجدولة</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⏰</div>
+                                <div class="stat-info">
+                                    <h3 id="utilizationRate">0%</h3>
+                                    <p>معدل الاستخدام</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة/تعديل حصة -->
+    <div id="sessionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="sessionModalTitle">إضافة حصة جديدة</h5>
+                <span class="close" onclick="scheduleManager.hideSessionModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">اليوم</label>
+                            <select class="form-control" id="sessionDay">
+                                <option value="sunday">الأحد</option>
+                                <option value="monday">الاثنين</option>
+                                <option value="tuesday">الثلاثاء</option>
+                                <option value="wednesday">الأربعاء</option>
+                                <option value="thursday">الخميس</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">الحصة</label>
+                            <select class="form-control" id="sessionPeriod">
+                                <option value="1">الحصة الأولى (07:30 - 08:15)</option>
+                                <option value="2">الحصة الثانية (08:15 - 09:00)</option>
+                                <option value="3">الحصة الثالثة (09:00 - 09:45)</option>
+                                <option value="4">الحصة الرابعة (10:00 - 10:45)</option>
+                                <option value="5">الحصة الخامسة (10:45 - 11:30)</option>
+                                <option value="6">الحصة السادسة (11:30 - 12:15)</option>
+                                <option value="7">الحصة السابعة (12:15 - 13:00)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">المادة</label>
+                    <input type="text" class="form-control" id="sessionSubject" placeholder="أدخل اسم المادة">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">الطلاب</label>
+                    <select class="form-control" id="sessionStudents" multiple>
+                        <!-- سيتم تعبئة الطلاب هنا -->
+                    </select>
+                    <small class="form-text text-muted">اضغط Ctrl لاختيار أكثر من طالب</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">القاعة</label>
+                    <input type="text" class="form-control" id="sessionRoom" placeholder="أدخل رقم القاعة">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="scheduleManager.hideSessionModal()">إلغاء</button>
+                <button type="button" class="btn btn-primary" id="saveSessionBtn">حفظ الحصة</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>ميسر التعلم &copy; <span id="currentYear"></span> - أ/ صالح عبد العزيز عبد الله العجلان</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/teacher/schedule.js"></script>
+</body>
+</html>
