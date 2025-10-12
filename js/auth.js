@@ -43,7 +43,7 @@ class Auth {
 
         setTimeout(() => {
             let redirectPage = '';
-            switch(role) {
+            switch (role) {
                 case 'owner':
                     redirectPage = 'owner/manage-users.html';
                     break;
