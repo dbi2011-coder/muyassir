@@ -4,36 +4,23 @@ class Database {
     }
 
     init() {
-        // حذف الحسابات السابقة واعادة التهيئة بسجل المالك فقط
-        localStorage.clear();
-
-        this.initializeOwnerOnly();
+        if (!localStorage.getItem('muyassir_initialized')) {
+            this.initializeDefaultData();
+        }
     }
 
-    initializeOwnerOnly() {
+    initializeDefaultData() {
         const users = [
-            {
-                id: 1,
-                username: 'owner',
-                password: 'admin123',
-                role: 'owner',  // تم تعديل الدور هنا إلى owner
-                name: 'مالك النظام',
-                email: 'owner@muyassir.com',
-                phone: '0500000000'
-            }
+            { id: 1, username: 'owner', password: 'admin123', role: 'owner', name: 'مالك النظام', email: 'owner@muyassir.com', phone: '0500000000' },
+            { id: 2, username: 'teacher1', password: 'teach123', role: 'teacher', name: 'المعلم أحمد', email: 'ahmed@school.com', phone: '0500000001' },
+            { id: 3, username: 'student1', password: 'stud123', role: 'student', name: 'الطالب سامي', email: 'sami@student.com', phone: '0500000002' },
+            { id: 4, username: 'committee1', password: 'comm123', role: 'committee', name: 'عضو اللجنة ليلى', email: 'layla@committee.com', phone: '0500000003' }
         ];
+
         localStorage.setItem('muyassir_users', JSON.stringify(users));
-        localStorage.setItem('muyassir_students', JSON.stringify([]));
-        localStorage.setItem('muyassir_tests', JSON.stringify([]));
-        localStorage.setItem('muyassir_lessons', JSON.stringify([]));
-        localStorage.setItem('muyassir_homework', JSON.stringify([]));
-        localStorage.setItem('muyassir_activities', JSON.stringify([]));
-        localStorage.setItem('muyassir_schedule', JSON.stringify([]));
-        localStorage.setItem('muyassir_handwriting', JSON.stringify([]));
-        localStorage.setItem('muyassir_rewards', JSON.stringify([]));
         localStorage.setItem('muyassir_initialized', 'true');
 
-        console.log('تم تهيئة قاعدة البيانات بحساب مالك النظام فقط.');
+        console.log('تم تهيئة بيانات المستخدمين الافتراضية لأربعة أدوار.');
     }
 
     getUsers() {
