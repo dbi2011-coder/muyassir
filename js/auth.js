@@ -39,16 +39,17 @@ class Auth {
         }
 
         localStorage.setItem('currentUser', JSON.stringify(user));
-        this.showMessage(`مرحباً ${user.name || user.username}! جاري التحويل...`, true);
+        const displayName = user.name || user.username;
+        this.showMessage(`مرحباً أ / ${displayName}! جاري التحويل...`, true);
 
         setTimeout(() => {
             let redirectPage = '';
-            switch (role) {
+            switch(role) {
                 case 'owner':
                     redirectPage = 'owner/manage-users.html';
                     break;
                 case 'teacher':
-                    redirectPage = 'teacher/manage-users.html';
+                    redirectPage = 'teacher/dashboard.html';
                     break;
                 case 'student':
                     redirectPage = 'student/dashboard.html';
