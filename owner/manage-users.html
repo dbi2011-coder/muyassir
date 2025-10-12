@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>إدارة المعلمين - مدير النظام</title>
 <style>
     body { font-family: Arial, sans-serif; margin: 2rem; direction: rtl; text-align: right; }
@@ -26,11 +26,11 @@
 </form>
 <div id="message"></div>
 
+<script src="../js/database.js"></script>
 <script>
 class UserManager {
     constructor() {
-        this.usersKey = 'muyassir_users';
-        this.users = JSON.parse(localStorage.getItem(this.usersKey) || '[]');
+        this.users = database.getUsers();
         this.messageDiv = document.getElementById('message');
         document.getElementById('teacherForm').addEventListener('submit', e => {
             e.preventDefault();
@@ -38,29 +38,28 @@ class UserManager {
         });
     }
     saveUsers() {
-        localStorage.setItem(this.usersKey, JSON.stringify(this.users));
+        database.saveUsers(this.users);
     }
     showMessage(text, isSuccess = true) {
         this.messageDiv.textContent = text;
         this.messageDiv.className = isSuccess ? 'message success' : 'message error';
-        setTimeout(()=>{ this.messageDiv.textContent = ''; }, 3000);
+        setTimeout(() => { this.messageDiv.textContent = ''; }, 3000);
     }
     addTeacher() {
         const username = document.getElementById('username').value.trim();
         const password = document.getElementById('password').value;
-        if(this.users.find(u => u.username === username)) {
+        if (this.users.find(u => u.username === username)) {
             this.showMessage('اسم المستخدم موجود مسبقاً', false);
             return;
         }
-        const newUser = { id: Date.now(), username, password, role: 'teacher', name: '', email: '', phone: '' };
-        this.users.push(newUser);
+        this.users.push({ id: Date.now(), username, password, role: 'teacher', name: '', email: '', phone: '' });
         this.saveUsers();
         this.showMessage('تم إضافة المعلم بنجاح');
         document.getElementById('teacherForm').reset();
     }
 }
+
 new UserManager();
 </script>
-
 </body>
 </html>
