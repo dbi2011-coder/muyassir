@@ -1,104 +1,41 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المعلم - ميسر التعلم</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/teacher.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>لوحة تحكم المعلم</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 2rem; direction: rtl; }
+    h1 { text-align: center; margin-bottom: 2rem; }
+    .welcome { font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; }
+    /* يمكنك إضافة أنماط أخرى حسب تصميم المشروع */
+</style>
 </head>
 <body>
-    <header class="dashboard-header">
-        <div class="container">
-            <div class="header-left">
-                <div class="logo">
-                    <h1>ميسر التعلم</h1>
-                    <span>لوحة المعلم</span>
-                </div>
-            </div>
-            <div class="header-right">
-                <div class="user-info">
-                    <span>مرحباً، أ/ صالح العجلان</span>
-                    <div class="user-avatar">👨‍🏫</div>
-                </div>
-                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
-            </div>
-        </div>
-    </header>
+<div class="welcome" id="welcomeMessage"></div>
 
-    <div class="dashboard-container">
-        <nav class="sidebar">
-            <ul class="sidebar-menu">
-                <li class="menu-item active"><a href="dashboard.html">📊 لوحة التحكم</a></li>
-                <li class="menu-item"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
-                <li class="menu-item"><a href="tests.html">📝 الاختبارات</a></li>
-                <li class="menu-item"><a href="lessons.html">📚 الدروس</a></li>
-                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
-            </ul>
-        </nav>
+<!-- محتوى الوظائف -->
 
-        <main class="dashboard-content">
-            <div class="content-header">
-                <h1>مرحباً بك في نظام ميسر التعلم 👨‍🏫</h1>
-                <p>ابدأ في إدارة طلابك وتصميم الدروس والاختبارات</p>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">👨‍🎓</div>
-                    <div class="stat-info">
-                        <h3>الطلاب المسجلين</h3>
-                        <span class="stat-number">12</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📝</div>
-                    <div class="stat-info">
-                        <h3>الاختبارات النشطة</h3>
-                        <span class="stat-number">8</span>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📚</div>
-                    <div class="stat-info">
-                        <h3>الدروس المنشأة</h3>
-                        <span class="stat-number">24</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="quick-actions">
-                <h2>إجراءات سريعة</h2>
-                <div class="actions-grid">
-                    <a href="students.html" class="action-card">
-                        <div class="action-icon">➕</div>
-                        <h3>إضافة طالب جديد</h3>
-                        <p>تسجيل طالب جديد في النظام</p>
-                    </a>
-                    <a href="tests.html" class="action-card">
-                        <div class="action-icon">📝</div>
-                        <h3>إنشاء اختبار</h3>
-                        <p>تصميم اختبار تشخيصي جديد</p>
-                    </a>
-                    <a href="lessons.html" class="action-card">
-                        <div class="action-icon">📚</div>
-                        <h3>تصميم درس</h3>
-                        <p>إنشاء درس أو تدريب جديد</p>
-                    </a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        // تسجيل الخروج
-        document.querySelector('.logout-btn').addEventListener('click', function() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
-                window.location.href = '../login.html';
-            }
-        });
-
-        console.log('لوحة تحكم المعلم جاهزة للاستخدام');
-    </script>
+<script src="../js/database.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const welcomeDiv = document.getElementById('welcomeMessage');
+    if(currentUser && currentUser.role === 'teacher') {
+        welcomeDiv.textContent = `مرحباً أ / ${currentUser.name}`;
+        // تحميل الوظائف المخصصة للمعلم هنا
+        // أمثلة:
+        // يمكنك عرض أزرار أو قائمة لوظائف المعلم كالآتي:
+        /*
+         * - إضافة طالب جديد
+         * - إضافة عضو لجنة
+         * - إدارة الطلاب وأعضاء اللجنة
+         * - تقارير وتقييمات
+         */
+    } else {
+        welcomeDiv.textContent = 'لا تملك صلاحيات الدخول لهذه الصفحة';
+    }
+});
+</script>
 </body>
 </html>
