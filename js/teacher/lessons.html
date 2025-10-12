@@ -1,325 +1,26 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تصميم الدروس - ميسر التعلم</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/teacher.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>إدارة الدروس</title>
+<link rel="stylesheet" href="../css/teacher.css" />
 </head>
 <body>
-    <header class="dashboard-header">
-        <div class="container">
-            <div class="header-left">
-                <div class="logo">
-                    <img src="../images/logo.png" alt="شعار ميسر التعلم" class="logo-image" onerror="this.style.display='none'">
-                    <div class="logo-text">
-                        <h1>ميسر التعلم</h1>
-                        <span>لوحة المعلم</span>
-                    </div>
-                </div>
-            </div>
-            <div class="header-right">
-                <div class="user-info">
-                    <span>مرحباً، أ/ صالح العجلان</span>
-                    <div class="user-avatar">👨‍🏫</div>
-                </div>
-                <button class="btn btn-outline logout-btn">تسجيل الخروج</button>
-            </div>
-        </div>
-    </header>
-
-    <div class="dashboard-container">
-        <nav class="sidebar">
-            <ul class="sidebar-menu">
-                <li class="menu-item"><a href="dashboard.html">📊 لوحة التحكم</a></li>
-                <li class="menu-item"><a href="students.html">👨‍🎓 إدارة الطلاب</a></li>
-                <li class="menu-item"><a href="tests.html">📝 الاختبارات</a></li>
-                <li class="menu-item active"><a href="lessons.html">📚 الدروس</a></li>
-                <li class="menu-item"><a href="handwriting.html">✍️ تحسين الخط</a></li>
-                <li class="menu-item"><a href="homework.html">📋 الواجبات</a></li>
-                <li class="menu-item"><a href="activities.html">🎯 الأنشطة</a></li>
-                <li class="menu-item"><a href="schedule.html">📅 الجدول</a></li>
-                <li class="menu-item"><a href="reports.html">📈 التقارير</a></li>
-            </ul>
-        </nav>
-
-        <main class="dashboard-content">
-            <div class="content-header">
-                <h1>تصميم الدروس 📚</h1>
-                <p>إنشاء وإدارة الدروس والتدريبات التفاعلية</p>
-            </div>
-
-            <div class="lessons-actions">
-                <div class="action-buttons">
-                    <button class="btn btn-primary" onclick="lessonsManager.showLessonForm()">
-                        ➕ إنشاء درس جديد
-                    </button>
-                    <button class="btn btn-secondary" onclick="lessonsManager.showStrategyLibrary()">
-                        🎯 مكتبة الاستراتيجيات
-                    </button>
-                </div>
-
-                <div class="filters">
-                    <select id="gradeFilter">
-                        <option value="">جميع الصفوف</option>
-                        <option value="first">الصف الأول</option>
-                        <option value="second">الصف الثاني</option>
-                        <option value="third">الصف الثالث</option>
-                        <option value="fourth">الصف الرابع</option>
-                        <option value="fifth">الصف الخامس</option>
-                        <option value="sixth">الصف السادس</option>
-                    </select>
-                    
-                    <select id="typeFilter">
-                        <option value="">جميع الأنواع</option>
-                        <option value="reading">قراءة</option>
-                        <option value="writing">كتابة</option>
-                        <option value="math">رياضيات</option>
-                        <option value="skills">مهارات</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="lessons-grid" id="lessonsContainer">
-                <!-- يتم تعبئته بالبيانات -->
-            </div>
-        </main>
-    </div>
-
-    <!-- نموذج إنشاء درس -->
-    <div id="lessonFormModal" class="form-modal">
-        <div class="modal-content" style="max-width: 800px;">
-            <div class="modal-header">
-                <h3 id="lessonFormTitle">إنشاء درس جديد</h3>
-                <button class="close-modal" onclick="lessonsManager.hideLessonForm()">×</button>
-            </div>
-            <form id="lessonForm" onsubmit="lessonsManager.saveLesson(event)">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="lessonTitle">عنوان الدرس *</label>
-                        <input type="text" id="lessonTitle" name="title" required placeholder="مثال: درس الحروف المتشابهة">
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="lessonGrade">الصف الدراسي *</label>
-                            <select id="lessonGrade" name="grade" required>
-                                <option value="">اختر الصف</option>
-                                <option value="first">الصف الأول الابتدائي</option>
-                                <option value="second">الصف الثاني الابتدائي</option>
-                                <option value="third">الصف الثالث الابتدائي</option>
-                                <option value="fourth">الصف الرابع الابتدائي</option>
-                                <option value="fifth">الصف الخامس الابتدائي</option>
-                                <option value="sixth">الصف السادس الابتدائي</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="lessonType">نوع الدرس *</label>
-                            <select id="lessonType" name="type" required>
-                                <option value="">اختر النوع</option>
-                                <option value="reading">قراءة</option>
-                                <option value="writing">كتابة</option>
-                                <option value="math">رياضيات</option>
-                                <option value="skills">مهارات</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="lessonStrategy">الاستراتيجية *</label>
-                            <select id="lessonStrategy" name="strategy" required>
-                                <option value="">اختر الاستراتيجية</option>
-                                <option value="game_based">التعلم باللعب</option>
-                                <option value="visual">التعلم البصري</option>
-                                <option value="kinesthetic">التعلم الحركي</option>
-                                <option value="cooperative">التعلم التعاوني</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="lessonTypeSelect">نوع الهدف *</label>
-                            <select id="lessonTypeSelect" name="lessonType" required>
-                                <option value="teaching_goal">هدف تدريسي</option>
-                                <option value="short_term">تقييم هدف قصير</option>
-                                <option value="maintenance">صيانة أهداف</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label for="lessonDescription">وصف الدرس</label>
-                        <textarea id="lessonDescription" name="description" rows="3" placeholder="وصف مختصر عن محتوى الدرس..."></textarea>
-                    </div>
-                    
-                    <div class="form-group full-width">
-                        <label for="lessonObjectives">الأهداف التعليمية</label>
-                        <textarea id="lessonObjectives" name="objectives" rows="3" placeholder="الأهداف المرجوة من هذا الدرس..."></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="targetPercentage">نسبة الإتقان المطلوبة (%)</label>
-                            <input type="number" id="targetPercentage" name="targetPercentage" min="0" max="100" value="80">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="contentType">نوع المحتوى</label>
-                            <select id="contentType" name="contentType">
-                                <option value="interactive">تفاعلي</option>
-                                <option value="video">فيديو</option>
-                                <option value="audio">صوتي</option>
-                                <option value="text">نصي</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-outline" onclick="lessonsManager.hideLessonForm()">إلغاء</button>
-                    <button type="submit" class="btn btn-primary">حفظ الدرس</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script src="../js/database.js"></script>
-    <script src="../js/auth.js"></script>
-    <script src="../js/utils.js"></script>
-    <script src="lessons.js"></script>
-    
-    <style>
-        .lessons-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .filters {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .filters select {
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        
-        .lessons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .lesson-card {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .lesson-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .lesson-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #f0f0f0;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        
-        .lesson-info h3 {
-            margin: 0 0 0.5rem 0;
-            color: #2c3e50;
-        }
-        
-        .lesson-meta {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .lesson-actions {
-            display: flex;
-            gap: 0.3rem;
-        }
-        
-        .lesson-content {
-            padding: 1.5rem;
-        }
-        
-        .lesson-description {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-        
-        .lesson-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .lesson-detail {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-        }
-        
-        .detail-label {
-            color: #666;
-        }
-        
-        .detail-value {
-            font-weight: 500;
-        }
-        
-        .lesson-footer {
-            padding: 1rem 1.5rem;
-            background: #f8f9fa;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .lesson-stats {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        @media (max-width: 768px) {
-            .lessons-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .filters {
-                flex-direction: column;
-            }
-            
-            .lessons-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<header class="dashboard-header">
+  <div class="container">
+    <h1>إدارة الدروس</h1>
+  </div>
+</header>
+<div class="dashboard-content">
+  <form id="addLessonForm">
+    <label for="lessonTitle">عنوان الدرس:</label>
+    <input id="lessonTitle" type="text" required />
+    <button type="submit">إضافة درس</button>
+  </form>
+  <div id="lessonList"></div>
+</div>
+<script src="../js/database.js"></script>
+<script src="../js/teacher/lessons.js"></script>
 </body>
 </html>
