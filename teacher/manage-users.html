@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة الطلاب وأعضاء اللجنة - المعلم</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 2rem; direction: rtl; text-align: right; }
+    label { display: block; margin-top: 1rem; }
+    input, select { width: 100%; padding: 0.5rem; margin-top: 0.2rem; }
+    button { margin-top: 1rem; padding: 0.6rem 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #0056b3; }
+    .message { margin-top: 1rem; font-weight: bold; }
+    .success { color: green; }
+    .error { color: red; }
+</style>
+</head>
+<body>
+<h1>إضافة طالب أو عضو لجنة</h1>
+<form id="userForm">
+    <label for="username">اسم المستخدم:</label>
+    <input type="text" id="username" required />
+    <label for="password">كلمة المرور:</label>
+    <input type="password" id="password" required />
+    <label for="role">الدور:</label>
+    <select id="role" required>
+        <option value="" disabled selected>اختر الدور</option>
+        <option value="student">طالب</option>
+        <option value="committee">عضو لجنة</option>
+    </select>
+    <button type="submit">إضافة مستخدم</button>
+</form>
+<div id="message"></div>
+
+<script>
+class UserManager {
+    constructor() {
+        this.usersKey = 'muyassir_users';
+        this.users = JSON.parse(localStorage.getItem(this.usersKey) || '[]');
+        this.messageDiv = document.getElementById('message');
+        document.getElementById('userForm').addEventListener('submit', e => {
+            e.preventDefault();
+            this.addUser();
+        });
+    }
+    saveUsers() {
+        localStorage.setItem(this.usersKey, JSON.stringify(this.users));
+    }
+    showMessage(text, isSuccess = true) {
+        this.messageDiv.textContent = text;
+        this.messageDiv.className = isSuccess ? 'message success' : 'message error';
+        setTimeout(()=>{ this.messageDiv.textContent = ''; }, 3000);
+    }
+    addUser() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const role = document.getElementById('role').value;
+        if(this.users.find(u => u.username === username)) {
+            this.showMessage('اسم المستخدم موجود مسبقاً', false);
+            return;
+        }
+        if(role !== 'student' && role !== 'committee') {
+            this.showMessage('يمكنك إضافة طالب أو عضو لجنة فقط', false);
+            return;
+        }
+        const newUser = { id: Date.now(), username, password, role, name: '', email: '', phone: '' };
+        this.users.push(newUser);
+        this.saveUsers();
+        this.showMessage('تم إضافة المستخدم بنجاح');
+        document.getElementById('userForm').reset();
+    }
+}
+new UserManager();
+</script>
+
+</body>
+</html>
