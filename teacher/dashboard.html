@@ -4,37 +4,72 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>لوحة تحكم المعلم</title>
-<style>
-    body { font-family: Arial, sans-serif; margin: 2rem; direction: rtl; }
-    h1 { text-align: center; margin-bottom: 2rem; }
-    .welcome { font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; }
-    /* يمكنك إضافة أنماط أخرى حسب تصميم المشروع */
-</style>
+<link rel="stylesheet" href="../css/teacher.css" />
 </head>
 <body>
-<div class="welcome" id="welcomeMessage"></div>
-
-<!-- محتوى الوظائف -->
+<header class="dashboard-header">
+  <div class="container">
+    <div class="header-left">
+      <div class="logo">
+        <h1>ميسر التعلم</h1>
+        <span id="teacherName"></span>
+      </div>
+    </div>
+    <div class="header-right">
+      <button id="logoutBtn">تسجيل الخروج</button>
+    </div>
+  </div>
+</header>
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <ul class="sidebar-menu" id="menuItems">
+      <!-- روابط تتضافر هنا حسب صلاحيات المعلم -->
+    </ul>
+  </aside>
+  <main class="dashboard-content">
+    <h1>مرحباً بك في لوحة تحكم المعلم</h1>
+    <p>استخدم القائمة الجانبية لإدارة مهامك.</p>
+  </main>
+</div>
 
 <script src="../js/database.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const welcomeDiv = document.getElementById('welcomeMessage');
-    if(currentUser && currentUser.role === 'teacher') {
-        welcomeDiv.textContent = `مرحباً أ / ${currentUser.name}`;
-        // تحميل الوظائف المخصصة للمعلم هنا
-        // أمثلة:
-        // يمكنك عرض أزرار أو قائمة لوظائف المعلم كالآتي:
-        /*
-         * - إضافة طالب جديد
-         * - إضافة عضو لجنة
-         * - إدارة الطلاب وأعضاء اللجنة
-         * - تقارير وتقييمات
-         */
-    } else {
-        welcomeDiv.textContent = 'لا تملك صلاحيات الدخول لهذه الصفحة';
-    }
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  if(!currentUser || currentUser.role !== 'teacher') {
+    alert('لا تملك صلاحيات الدخول');
+    window.location.href = '../login.html';
+    return;
+  }
+
+  document.getElementById('teacherName').textContent = currentUser.name;
+
+  const menu = document.getElementById('menuItems');
+  const perms = currentUser.permissions || [];
+
+  if(perms.includes('addStudent') || perms.includes('manageStudents')) {
+    menu.innerHTML += '<li class="menu-item"><a href="students.html">إدارة الطلاب</a></li>';
+  }
+  if(perms.includes('addCommitteeMember') || perms.includes('manageCommittee')) {
+    menu.innerHTML += '<li class="menu-item"><a href="committee.html">إدارة أعضاء اللجنة</a></li>';
+  }
+  if(perms.includes('manageLessons')) {
+    menu.innerHTML += '<li class="menu-item"><a href="lessons.html">إدارة الدروس</a></li>';
+  }
+  if(perms.includes('manageHomework')) {
+    menu.innerHTML += '<li class="menu-item"><a href="homework.html">إدارة الواجبات</a></li>';
+  }
+  if(perms.includes('manageTests')) {
+    menu.innerHTML += '<li class="menu-item"><a href="tests.html">إدارة الاختبارات</a></li>';
+  }
+  if(perms.includes('manageHandwriting')) {
+    menu.innerHTML += '<li class="menu-item"><a href="handwriting.html">تحسين الخط</a></li>';
+  }
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('currentUser');
+    location.href = '../login.html';
+  });
 });
 </script>
 </body>
