@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>لوحة تحكم المالك - نظام ميسر التعلم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fefefe;
+            margin: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        .user-info {
+            margin-bottom: 2rem;
+        }
+        nav a {
+            margin-right: 1rem;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        button.logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        button.logout:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="logout" id="logoutBtn">تسجيل خروج</button>
+        <h1>لوحة تحكم المالك</h1>
+    </header>
+    <main>
+        <div class="user-info" id="userInfo"></div>
+        <nav>
+            <a href="#">إدارة المستخدمين</a>
+            <a href="#">الإعدادات</a>
+            <a href="#">التقارير</a>
+        </nav>
+        <section>
+            <h2>مرحباً بك في نظام ميسر التعلم</h2>
+            <p>يمكنك إدارة حسابك وضبط الإعدادات العامة من هنا.</p>
+        </section>
+    </main>
+
+    <script>
+        // جلب بيانات المستخدم الحالي
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        const userInfoDiv = document.getElementById('userInfo');
+        if (currentUser) {
+            userInfoDiv.innerHTML = `<p>مرحباً، ${currentUser.name} (بريدك الإلكتروني: ${currentUser.email})</p>`;
+        } else {
+            userInfoDiv.innerHTML = '<p>لم يتم تسجيل الدخول.</p>';
+            // إعادة التوجيه لصفحة تسجيل الدخول إذا لم يكن مسجل
+            window.location.href = 'login.html';
+        }
+
+        // تسجيل الخروج
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
