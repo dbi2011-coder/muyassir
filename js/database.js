@@ -10,20 +10,18 @@ class Database {
     }
 
     initializeOwnersOnly() {
-        // بيانات حساب مالك واحد فقط بدون حسابات تجريبية
         const users = [
             {
                 id: 1,
                 username: 'owner',
                 password: 'admin123',
-                role: 'teacher', // صلاحيات مالك النظام كمعلم
+                role: 'teacher',
                 name: 'مالك النظام',
                 email: 'owner@muyassir.com',
                 phone: '0500000000'
             }
         ];
 
-        // تهيئة بيانات فارغة للفئات الأخرى
         localStorage.setItem('muyassir_users', JSON.stringify(users));
         localStorage.setItem('muyassir_students', JSON.stringify([]));
         localStorage.setItem('muyassir_tests', JSON.stringify([]));
@@ -35,14 +33,17 @@ class Database {
         localStorage.setItem('muyassir_rewards', JSON.stringify([]));
         localStorage.setItem('muyassir_initialized', 'true');
 
-        console.log('تم تهيئة قاعدة البيانات بحساب مالك واحد فقط.');
+        console.log('تم تهيئة قاعدة البيانات بحساب مالك واحد.');
     }
 
     getUsers() {
         return JSON.parse(localStorage.getItem('muyassir_users') || '[]');
     }
 
-    // دوال أخرى حسب الحاجة مثل إضافة وحذف المستخدمين...
+    findUser(username, password, role) {
+        const users = this.getUsers();
+        return users.find(user => user.username === username && user.password === password && user.role === role);
+    }
 }
 
 const database = new Database();
