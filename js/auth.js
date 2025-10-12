@@ -28,14 +28,10 @@ class Auth {
         localStorage.setItem('currentUser', JSON.stringify(user));
         alert(`مرحباً ${user.name}!`);
 
-        if (role === 'teacher') {
-            window.location.href = 'teacher/dashboard.html';
-        } else if (role === 'student') {
-            window.location.href = 'student/dashboard.html';
-        } else if (role === 'committee') {
-            window.location.href = 'committee/dashboard.html';
+        if (role === 'owner') {
+            window.location.href = 'owner/dashboard.html'; // صفحة المالك
         } else {
-            alert('نوع الحساب غير معروف');
+            alert('هذا النظام مخصص حالياً فقط لحساب المالك.');
         }
     }
 }
